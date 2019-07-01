@@ -1,0 +1,9 @@
+listen_http: 80
+# listen_https: 443
+nginx_user: ec2-user
+worker_processes: auto
+worker_connections: 512
+hostname:
+  - test1.rebrainme.com
+  - test2.rebrainme.com
+  - test4.rebrainme.com

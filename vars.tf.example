@@ -1,0 +1,27 @@
+variable "region" {
+  default = "us-east-2"
+}
+
+variable "access_key" {
+  default = ""
+}
+
+variable "secret_key" {
+  default = ""
+}
+
+variable "ssh_keys" {
+  default ""
+}
+
+variable "ssh_rebrain_key" {
+  default = "" #rebrain
+}
+
+variable "ami" {
+  default = "ami-0d8f6eb4f641ef691"
+}
+
+variable "plan" {
+  default = "t2.micro"
+}

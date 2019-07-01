@@ -1,0 +1,49 @@
+---
+- name: Enable nginx for amazon
+  shell: "amazon-linux-extras enable nginx1.12"
+  become: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Install nginx
+  yum:
+    name:         nginx
+    state:        present
+    update_cache: yes
+
+- name: Replace NGINX config
+  template:
+    src=templates/nginx.conf.j2
+    dest=/etc/nginx/nginx.conf
+  notify:
+    - nginx_reload
+
+- name: Add virtualhost config files
+  template:
+    src=templates/nginx_vhost.conf.j2
+    dest=/etc/nginx/conf.d/{{ item }}.conf
+  with_items: "{{ hostname }}"
+  notify:
+    - nginx_reload
+
+# - name: Create a symbolic link
+#   file:
+#     src: /file/to/link/to
+#     dest: /path/to/symlink
+#     owner: foo
+#     group: foo
+#     state: link
+
+- name: create folder for nginx_vhost
+  file:
+    path: /usr/share/nginx/{{ item }}
+    state: directory
+    mode: '0755'
+  with_items: "{{ hostname }}"
+
+- name: add index.html for nginx_vhost
+  template:
+    src=templates/index.html.j2
+    dest=/usr/share/nginx/{{ item }}/index.html
+  with_items: "{{ hostname }}"
+  notify:
+    - nginx_reload
